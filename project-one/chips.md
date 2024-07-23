@@ -96,3 +96,31 @@ CHIP Xor {
 | 1 | 0 | 1 |
 | 1 | 1 | 0 |
 ```
+
+**Multiplexer**: Can be built from the above gates. The multiplexer uses a selector bit to chose its output. 
+
+```
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    PARTS:
+        Not(in=sel , out=selOff );
+        And(a=a, b=selOff, out=andSelOutA);
+        And(a=b , b=sel , out=andSelOutB);
+        Or(a=andSelOutA , b=andSelOutB , out=out );
+}
+```
+
+```
+| a | b |sel|out|
+| 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 |
+| 0 | 1 | 0 | 0 |
+| 0 | 1 | 1 | 1 |
+| 1 | 0 | 0 | 1 |
+| 1 | 0 | 1 | 0 |
+| 1 | 1 | 0 | 1 |
+| 1 | 1 | 1 | 1 |
+```
+
