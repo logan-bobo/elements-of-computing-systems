@@ -29,7 +29,7 @@ CHIP Not {
 | 1 | 0 |
 ```
 
-**And**: This gate can be produced from a combonation of `nand` and `not`. Notice the truth table is just inverted `nand`
+**And**: This gate can be produced from a combination of `nand` and `not`. Notice the truth table is just inverted `nand`
 
 ```
 CHIP And {
@@ -124,3 +124,25 @@ CHIP Mux {
 | 1 | 1 | 1 | 1 |
 ```
 
+**Demultiplexer**: Can be built from the same primitive components as the `multiplexer` however performs the opisite
+function. Taking in a single and selector bit and outputting acording to the selector bit.
+
+```
+CHIP DMux {
+    IN in, sel;
+    OUT a, b;
+
+    PARTS:
+        Not(in=sel , out=selOut );
+        And(a=in, b=selOut, out=a);
+        And(a=in, b=sel, out=b); 
+}
+```
+
+```
+|in |sel| a | b |
+| 0 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 0 |
+| 1 | 0 | 1 | 0 |
+| 1 | 1 | 0 | 1 |
+```
