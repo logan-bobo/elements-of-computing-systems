@@ -1375,4 +1375,69 @@ CHIP DMux4Way {
 | 1 |  11  | 0 | 0 | 0 | 1 |
 ```
 
+**DMux8Way**: This is the same as a DMux4way but instead we can select from 8 values to output to based on a 3 bit selector
+
+```
+CHIP DMux8Way {
+    IN in, sel[3];
+    OUT a, b, c, d, e, f, g, h;
+
+    PARTS:
+    Not(in=sel[0] , out=notSelZero );
+    Not(in=sel[1] , out=notSelOne );
+    Not(in=sel[2] , out=notSelTwo );
+
+    And(a=notSelZero , b=notSelOne , out=out_a_1 );
+    And(a=out_a_1 , b=notSelTwo , out=out_a_2 );
+    And(a=out_a_2 , b=in , out=a );
+
+    And(a=sel[0] , b=notSelOne , out=out_b_1 );
+    And(a=notSelTwo , b=out_b_1 , out=out_b_2 );
+    And(a=out_b_2 , b=in , out=b );
+
+    And(a=sel[1] , b=notSelZero , out=out_c_1 );
+    And(a=out_c_1 , b=notSelTwo , out=out_c_2 );
+    And(a=out_c_2 , b=in, out=c );
+
+    And(a=notSelTwo , b=sel[1] , out=out_d_1 );
+    And(a=sel[0] , b=out_d_1 , out=out_d_2 );
+    And(a=out_d_2 , b=in , out=d );
+
+    And(a=sel[2] , b=notSelOne , out=out_e_1 );
+    And(a=notSelZero , b=out_e_1 , out=out_e_2 );
+    And(a=in , b=out_e_2 , out=e );
+
+    And(a=sel[2] , b=sel[0] , out=out_f_1 );
+    And(a=out_f_1 , b=notSelOne , out=out_f_2 );
+    And(a=out_f_2 , b=in , out=f );
+
+    And(a=sel[2] , b=sel[1] , out=out_g_1 );
+    And(a=out_g_1 , b=notSelZero , out=out_g_2 );
+    And(a=in , b=out_g_2 , out=g );
+
+    And(a=sel[0] , b=sel[1] , out=out_h_1 );
+    And(a=sel[2] , b=out_h_1 , out=out_h_2 );
+    And(a=in , b=out_h_2 , out=h );
+}
+```
+
+```
+|in |  sel  | a | b | c | d | e | f | g | h |
+| 0 |  000  | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 |  001  | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 |  010  | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 |  011  | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 |  100  | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 |  101  | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 |  110  | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 |  111  | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 1 |  000  | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 1 |  001  | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 1 |  010  | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| 1 |  011  | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| 1 |  100  | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| 1 |  101  | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| 1 |  110  | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| 1 |  111  | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+```
 
