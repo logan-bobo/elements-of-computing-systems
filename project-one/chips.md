@@ -633,7 +633,7 @@ CHIP Mux4Way16 {
 | 0001001000110100 | 1001100001110110 | 1010101010101010 | 0101010101010101 |  11  | 0101010101010101 |
 ```
 
-**mux8way16**: This chip looks complicated but its not once you have solved a multi way mux its about scailig the
+**mux8way16**: This chip looks complicated but its not once you have solved a multi way mux its about scaling the
 solution with little added. This was a real ah ha moment for me. If I were to do this again I would create
 abstract chips cush as and3way and or8way
 
@@ -1337,3 +1337,42 @@ CHIP Mux8Way16 {
     Or(a=ABCD_out_2_15 , b=EFGH_out_2_15 , out=out[15] );
 }
 ```
+
+**DMux4Way**: This chip allows two selector bits to define the signal to carry to one of four outputs. 
+
+```
+CHIP DMux4Way {
+    IN in, sel[2];
+    OUT a, b, c, d;
+
+    PARTS:
+    Not(in=sel[0] , out=notSelZero );
+    Not(in=sel[1] , out=notSelOne );
+
+    And(a=notSelZero , b=notSelOne , out=out_a_1 );
+    And(a=out_a_1 , b=in , out=a );
+
+    And(a=sel[0] , b=notSelOne , out=out_b_1 );
+    And(a=out_b_1 , b=in , out=b );
+
+    And(a=sel[1] , b=notSelZero , out=out_c_1 );
+    And(a=out_c_1 , b=in, out=c );
+
+    And(a=sel[0] , b=sel[1] , out=out_d_1 );
+    And(a=out_d_1 , b=in , out=d );
+}
+```
+
+```
+|in | sel  | a | b | c | d |
+| 0 |  00  | 0 | 0 | 0 | 0 |
+| 0 |  01  | 0 | 0 | 0 | 0 |
+| 0 |  10  | 0 | 0 | 0 | 0 |
+| 0 |  11  | 0 | 0 | 0 | 0 |
+| 1 |  00  | 1 | 0 | 0 | 0 |
+| 1 |  01  | 0 | 1 | 0 | 0 |
+| 1 |  10  | 0 | 0 | 1 | 0 |
+| 1 |  11  | 0 | 0 | 0 | 1 |
+```
+
+
