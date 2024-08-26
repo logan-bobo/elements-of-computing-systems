@@ -80,3 +80,43 @@ CHIP Add16 {
 | 0011110011000011 | 0000111111110000 | 0100110010110011 |
 | 0001001000110100 | 1001100001110110 | 1010101010101010 |
 ```
+
+**Inc16**: Designed to increment a 16 bit number
+```
+CHIP Inc16 {
+    IN in[16];
+    OUT out[16];
+
+    PARTS:
+
+    Not(in=in[0] , out=notZero );
+    Or(a=in[0] , b=notZero , out=alwaysOn);
+
+    And(a=in[0] , b=notZero , out=alwaysOff );
+
+    HalfAdder(a=in[0], b=alwaysOn, sum=out[0], carry=ha_0_out_carry);
+    FullAdder(a=in[1], b=alwaysOff, c=ha_0_out_carry, sum=out[1], carry=fa_1_out_carry);
+    FullAdder(a=in[2], b=alwaysOff, c=fa_1_out_carry, sum=out[2], carry=fa_2_out_carry);
+    FullAdder(a=in[3], b=alwaysOff, c=fa_2_out_carry, sum=out[3], carry=fa_3_out_carry);
+    FullAdder(a=in[4], b=alwaysOff, c=fa_3_out_carry, sum=out[4], carry=fa_4_out_carry);
+    FullAdder(a=in[5], b=alwaysOff, c=fa_4_out_carry, sum=out[5], carry=fa_5_out_carry);
+    FullAdder(a=in[6], b=alwaysOff, c=fa_5_out_carry, sum=out[6], carry=fa_6_out_carry);
+    FullAdder(a=in[7], b=alwaysOff, c=fa_6_out_carry, sum=out[7], carry=fa_7_out_carry);
+    FullAdder(a=in[8], b=alwaysOff, c=fa_7_out_carry, sum=out[8], carry=fa_8_out_carry);
+    FullAdder(a=in[9], b=alwaysOff, c=fa_8_out_carry, sum=out[9], carry=fa_9_out_carry);
+    FullAdder(a=in[10], b=alwaysOff, c=fa_9_out_carry, sum=out[10], carry=fa_10_out_carry);
+    FullAdder(a=in[11], b=alwaysOff, c=fa_10_out_carry, sum=out[11], carry=fa_11_out_carry);
+    FullAdder(a=in[12], b=alwaysOff, c=fa_11_out_carry, sum=out[12], carry=fa_12_out_carry);
+    FullAdder(a=in[13], b=alwaysOff, c=fa_12_out_carry, sum=out[13], carry=fa_13_out_carry);
+    FullAdder(a=in[14], b=alwaysOff, c=fa_13_out_carry, sum=out[14], carry=fa_14_out_carry);
+    FullAdder(a=in[15], b=alwaysOff, c=fa_14_out_carry, sum=out[15], carry=fa_15_out_carry);
+}
+```
+
+```
+|        in        |       out        |
+| 0000000000000000 | 0000000000000001 |
+| 1111111111111111 | 0000000000000000 |
+| 0000000000000101 | 0000000000000110 |
+| 1111111111111011 | 1111111111111100 |
+```
